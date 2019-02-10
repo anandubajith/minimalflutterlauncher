@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart' as intl;
-import 'dart:convert';
 import 'package:launcher_assist/launcher_assist.dart';
 
 void main() => runApp(new MyApp());
@@ -36,26 +35,24 @@ class _MyAppState extends State<MyApp> {
 
   Widget buttonForPackage(String packageName, String title) {
     return GestureDetector(
-      // When the child is tapped, show a snackbar
       onTap: () {
         launchApp(packageName);
       },
-      // Our Custom Button!
+      onLongPress:() { launchApp("com.google.android.contacts"); },
       child: Container(
         padding: EdgeInsets.all(12.0),
-        child: Text(title,
-            style: TextStyle(
-              fontFamily: 'Raleway',
-              fontSize: 30.0,
-            )),
+        child:Text(title,
+                style: TextStyle(
+                  fontFamily: 'Raleway',
+                  fontSize: 30.0,
+                )
+              ),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    String formattedDate =
-        intl.DateFormat('kk:mm:ss \nEEE d MMM').format(DateTime.now());
 
     return Container(
         decoration: BoxDecoration(
@@ -65,12 +62,11 @@ class _MyAppState extends State<MyApp> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             // Add one stop for each color. Stops should increase from 0 to 1
-            stops: [0.1, 0.7, 0.9],
+            stops: [0.1, 0.7],
             colors: [
               // Colors are easy thanks to Flutter's Colors class.
               Colors.black,
-              Colors.indigo[600],
-              Colors.indigo[400],
+              Colors.indigo[600]
             ],
           ),
         ),
@@ -79,19 +75,20 @@ class _MyAppState extends State<MyApp> {
             textDirection: TextDirection.ltr,
             child: Column(children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(top: 100, bottom: 200),
+                padding: EdgeInsets.only(top: 100, bottom: 160),
                 child: Text(
                     _timeString ?? 'broken',
                     
                     style: TextStyle(
                         fontFamily: 'Raleway',
                         fontSize: 50.0,
-                      
                         color: Colors.white),
                   ),
               ),
-              buttonForPackage("org.telegram.messenger", "telegram"),
-              buttonForPackage("com.google.android.dialer", "call")
+
+              buttonForPackage("com.google.android.dialer", "call"),
+              buttonForPackage("com.google.android.gm", "gmail"),
+              buttonForPackage("org.telegram.messenger", "telegram")
             ])));
   }
 
