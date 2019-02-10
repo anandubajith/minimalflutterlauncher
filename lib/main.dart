@@ -8,7 +8,6 @@ void main() => runApp(new MyApp());
 
 // TODO: split the date and day?
 
-
 class MyApp extends StatefulWidget {
   MyApp({Key key, this.title}) : super(key: key);
   final String title;
@@ -27,7 +26,6 @@ class _MyAppState extends State<MyApp> {
     // force potrait orientation
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-
     _timeString = _formatDateTime(DateTime.now());
     Timer.periodic(Duration(seconds: 10), (Timer t) => _getTime());
     super.initState();
@@ -36,60 +34,55 @@ class _MyAppState extends State<MyApp> {
   Widget buttonForPackage(String packageName, String title) {
     return GestureDetector(
       onTap: () {
-        launchApp(packageName);
+        _launchApp(packageName);
       },
-      onLongPress:() { launchApp("com.google.android.contacts"); },
+      // onLongPress:() { _launchApp("com.google.android.contacts"); },
       child: Container(
         padding: EdgeInsets.all(12.0),
-        child:Text(title,
-                style: TextStyle(
-                  fontFamily: 'Raleway',
-                  fontSize: 30.0,
-                )
-              ),
+        child: Text(title,
+            style: TextStyle(
+              fontFamily: 'Comfortaa',
+              fontSize: 30.0,
+            )),
       ),
     );
   }
 
+  Widget dateTimeWidget() {
+    return GestureDetector(
+        onLongPress: () {
+          _launchApp("com.google.android.calendar");
+        },
+        child: Padding(
+          padding: EdgeInsets.only(top: 100, bottom: 160),
+          child: Text(
+            _timeString ?? 'broken',
+            style: TextStyle(
+                fontFamily: 'Comfortaa', fontSize: 50.0, color: Colors.white),
+          ),
+        ));
+  }
+
   @override
   Widget build(BuildContext context) {
-
     return Container(
         decoration: BoxDecoration(
-          // Box decoration takes a gradient
           gradient: LinearGradient(
-            // Where the linear gradient begins and ends
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            // Add one stop for each color. Stops should increase from 0 to 1
             stops: [0.1, 0.7],
-            colors: [
-              // Colors are easy thanks to Flutter's Colors class.
-              Colors.black,
-              Colors.indigo[600]
-            ],
+            colors: [Colors.black, Colors.indigo[600]],
           ),
         ),
-        // padding: EdgeInsets.all(25.0),
         child: Directionality(
             textDirection: TextDirection.ltr,
             child: Column(children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(top: 100, bottom: 160),
-                child: Text(
-                    _timeString ?? 'broken',
-                    
-                    style: TextStyle(
-                        fontFamily: 'Raleway',
-                        fontSize: 50.0,
-                        color: Colors.white),
-                  ),
-              ),
-
+              dateTimeWidget(),
               buttonForPackage("com.google.android.dialer", "call"),
               buttonForPackage("com.google.android.gm", "gmail"),
               buttonForPackage("org.telegram.messenger", "telegram")
-            ])));
+            ])
+            ));
   }
 
   void _getTime() {
@@ -104,7 +97,7 @@ class _MyAppState extends State<MyApp> {
     return intl.DateFormat('kk:mm \nEEE d MMM').format(dateTime).toLowerCase();
   }
 
-  void launchApp(String packageName) {
+  void _launchApp(String packageName) {
     LauncherAssist.launchApp(packageName);
   }
 }
