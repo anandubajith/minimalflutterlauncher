@@ -50,6 +50,9 @@ class _MyAppState extends State<MyApp> {
 
   Widget dateTimeWidget() {
     return GestureDetector(
+        onTap: () {
+          _launchApp("com.google.android.deskclock");
+        },
         onLongPress: () {
           _launchApp("com.google.android.calendar");
         },
